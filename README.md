@@ -33,6 +33,21 @@ python3 -m http.server 8099
 # open http://localhost:8099/   (?dev=1 shows the FPS overlay)
 ```
 
+## Deploy to GitHub Pages
+
+A workflow at `.github/workflows/pages.yml` publishes `public/` to GitHub Pages on every
+push to `main` (and via *Run workflow*). No build step — the static files ship as-is.
+
+One-time setup: **Settings → Pages → Build and deployment → Source: GitHub Actions**.
+After it runs, the game is live at:
+
+```
+https://ducminh11102012.github.io/Paper-Boat/
+```
+
+All asset/module paths are relative (`./game.js`, `./assets/…`), so it works under the
+`/Paper-Boat/` subpath without changes. `public/.nojekyll` disables Jekyll processing.
+
 ## Project layout
 
 ```
