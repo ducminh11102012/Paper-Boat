@@ -1,0 +1,373 @@
+// strings.js — all player-visible text (VI + EN). Zero UI literals live in game code.
+// Switching language is a pure data swap. Speaker ids: narr, minh, thu, banoi, ongtu.
+
+export const UI = {
+  vi: {
+    choose_language: "Chọn ngôn ngữ",
+    btn_vi: "Tiếng Việt",
+    btn_en: "English",
+    press_start: "Nhấn Enter hoặc chạm để bắt đầu",
+    press_continue: "Nhấn phím bất kỳ để tiếp tục",
+    tap_advance: "▾",
+    move_hint: "Dùng phím mũi tên / WASD để đi · Space để tương tác",
+    mobile_hint: "Kéo để đi · chạm để tương tác",
+    chapter_label: "Chương",
+    ch1_title: "Đến Làng",
+    ch2_title: "Những Ngày Mùa Hè",
+    ch3_title: "Vết Nứt",
+    ch4a_title: "Sự Thật",
+    ch4b_title: "Tạm Biệt",
+    fireflies_goal: "Bắt đom đóm: ",
+    fireflies_done: "Cái lọ đầy ánh sáng.",
+    choice_frog_no: "Tao không định bắt ếch.",
+    choice_frog_yes: "Tao biết cách bắt.",
+    choice_boat_teach: "Dạy Thu gấp lại thuyền.",
+    choice_boat_skip: "Thôi, kệ đi.",
+    choice_sing_yes: "Hát theo Thu.",
+    choice_sing_no: "Chỉ ngồi nghe.",
+    interact_song: "Hát cùng Thu",
+    interact_examine: "Xem",
+    the_end: "Hết",
+    restart: "Chơi lại",
+    credits: "Paper Boats",
+    settings: "Cài đặt",
+    volume: "Âm lượng",
+    language: "Ngôn ngữ",
+    back: "Quay lại",
+    memories_kept: "Ký ức giữ được",
+  },
+  en: {
+    choose_language: "Choose your language",
+    btn_vi: "Tiếng Việt",
+    btn_en: "English",
+    press_start: "Press Enter or tap to begin",
+    press_continue: "Press any key to continue",
+    tap_advance: "▾",
+    move_hint: "Arrow keys / WASD to walk · Space to interact",
+    mobile_hint: "Drag to walk · tap to interact",
+    chapter_label: "Chapter",
+    ch1_title: "The Village",
+    ch2_title: "Summer Days",
+    ch3_title: "The Crack",
+    ch4a_title: "The Truth",
+    ch4b_title: "Goodbye",
+    fireflies_goal: "Catch fireflies: ",
+    fireflies_done: "The jar is full of light.",
+    choice_frog_no: "I'm not trying to catch frogs.",
+    choice_frog_yes: "I know how to catch them.",
+    choice_boat_teach: "Show Thu how to fold it again.",
+    choice_boat_skip: "Never mind, let it go.",
+    choice_sing_yes: "Sing along with Thu.",
+    choice_sing_no: "Just sit and listen.",
+    interact_song: "Sing with Thu",
+    interact_examine: "Look",
+    the_end: "The End",
+    restart: "Play again",
+    credits: "Paper Boats",
+    settings: "Settings",
+    volume: "Volume",
+    language: "Language",
+    back: "Back",
+    memories_kept: "Memories kept",
+  },
+};
+
+export const NARR = {
+  vi: {
+    intro: "Hà Nội, tháng 6 năm 1996. Bố mẹ tao vừa ly hôn. Tao về làng ở với bà Nội một mùa hè.",
+    arrive: "Chiếc xe đò bỏ tao lại đầu làng. Khói bụi. Tiếng ve. Mùi rơm.",
+    song_heard: "Có tiếng hát vọng ra từ phía bờ ao...",
+    cadao: "\"Con cò mà đi ăn đêm, đậu phải cành mềm lộn cổ xuống ao...\"",
+    frog_taught: "Thu chỉ tao cách rình con ếch. Tao bắt hụt. Nó cười. Tao cũng cười.",
+    boat_fold: "Thu lúi húi gấp. Ra một cục giấy nhàu nát.",
+    boat_taught: "Tao cầm tay Thu, gấp lại từng nếp. Lần này ra hình con thuyền. Thu giữ nó thật chặt.",
+    jealous_after: "Tao đi câu với Bắp. Lúc về, Thu đã ngồi chỗ cũ, như chưa từng giận.",
+    ram_thang_bay: "Đêm rằm tháng Bảy. Bà thắp hương ngoài ngõ, rải cháo, đốt vàng mã. Trời tối hơn mọi khi.",
+    ram_empty: "Tao nhìn ra chỗ Thu hay ngồi. Tối om. Không có ai.",
+    cold_after: "Thu bỏ đi. Hôm sau nó lại bình thường, như chưa hề có chuyện gì.",
+    grave_found: "Lệch khỏi đường mòn, sau gốc đa, có một tấm bia đá cũ. Chữ đã mờ.",
+    grave_text: "Nguyễn Thị Thu · 1984 – 1994",
+    notebook: "Cuốn sổ bà hay cầm khi cầu nguyện. Gần cuối trang, một dòng chữ run run:",
+    notebook_text: "Nguyễn Thị Thu — sinh 1984, mất tháng 8 năm 1994 — mùa lũ.",
+    river_black: "Ông đứng dậy, bỏ đi. Màn hình tối đen. Không nhạc. Chỉ còn tiếng nước chảy.",
+    festival_far: "Tiếng trống hội. Trẻ con chạy. Tiếng cười vọng từ xa.",
+    thu_fade: "Đèn lồng sáng dần lên. Thu mờ đi trong ánh sáng ấm.",
+    to_letter: "Mùa hè của chúng mình ngắn lắm. Nhưng nó đã ở lại.",
+    credits_line: "Câu chuyện về một đứa trẻ sợ bị quên lãng.\nVà một mùa hè đã giữ em lại mãi mãi.",
+  },
+  en: {
+    intro: "Hanoi, June 1996. My parents had just divorced. I spent the summer with my grandmother in the village.",
+    arrive: "The bus left me at the edge of the village. Dust. Cicadas. The smell of straw.",
+    song_heard: "A song drifts up from the pond...",
+    cadao: "\"The little stork goes hunting at night, lands on a soft branch, and tumbles into the pond...\"",
+    frog_taught: "Thu showed me how to stalk a frog. I missed. She laughed. So did I.",
+    boat_fold: "Thu fumbled with the paper. Out came a crumpled little wad.",
+    boat_taught: "I took Thu's hands and folded it again, crease by crease. This time it became a boat. She held it tight.",
+    jealous_after: "I went fishing with Bap. When I came back, Thu was sitting in her spot, as if she'd never been upset.",
+    ram_thang_bay: "The night of the Ghost Festival. Grandma lit incense by the gate, scattered rice porridge, burned paper offerings. The night was darker than usual.",
+    ram_empty: "I looked over to where Thu always sat. Pitch dark. No one there.",
+    cold_after: "Thu walked away. The next day she was normal again, as if nothing had happened.",
+    grave_found: "Off the path, behind the banyan, there was an old stone marker. The words had faded.",
+    grave_text: "Nguyen Thi Thu · 1984 – 1994",
+    notebook: "Grandma's notebook, the one she holds when she prays. Near the last page, a trembling line:",
+    notebook_text: "Nguyen Thi Thu — born 1984, died August 1994 — the flood.",
+    river_black: "He stood up and walked away. The screen went black. No music. Only the sound of running water.",
+    festival_far: "Festival drums. Children running. Laughter from far away.",
+    thu_fade: "The lanterns brighten. Thu fades into the warm light.",
+    to_letter: "Our summer was so short. But it stayed.",
+    credits_line: "A story about a child afraid of being forgotten.\nAnd a summer that kept her, forever.",
+  },
+};
+
+export const SPEAKER = {
+  vi: { narr: "", minh: "Minh", thu: "Thu", banoi: "Bà Nội", ongtu: "Ông Tư" },
+  en: { narr: "", minh: "Minh", thu: "Thu", banoi: "Grandma", ongtu: "Old Tu" },
+};
+
+// Dialogue lines: { sp: speakerId, p: portraitKey|null, t: text }
+function D(vi, en) { return { vi, en }; }
+
+// Helper builds parallel vi/en dialogue arrays from a single spec list.
+// spec entry: [sp, portrait, viText, enText]
+function dlg(spec) {
+  return {
+    vi: spec.map(([sp, p, vi]) => ({ sp, p, t: vi })),
+    en: spec.map(([sp, p, , en]) => ({ sp, p, t: en })),
+  };
+}
+
+const RAW = {
+  ch1_banoi_welcome: dlg([
+    ["banoi", "banoi_normal", "Minh hả? Trời, lớn quá rồi. Đường xa, vào nhà với bà.", "Minh? Heavens, look how you've grown. Long road — come inside with Grandma."],
+    ["banoi", "banoi_normal", "Cứ đi loanh quanh cho biết làng. Nhưng tối thì về nhà nghe chưa.", "Wander around, get to know the village. But come home before dark, you hear?"],
+  ]),
+  ch1_hs_banyan: dlg([
+    ["banoi", "banoi_normal", "Cây đa này lâu đời hơn bà nhiều. Đừng ra đây ban đêm nghe chưa.", "This banyan is far older than I am. Don't come out here at night, alright?"],
+  ]),
+  ch1_hs_pond: dlg([
+    ["banoi", "banoi_normal", "Mùa này sen vừa tàn. Năm ngoái đẹp lắm. Ra đó cẩn thận nước.", "The lotuses just withered this season. Last year they were lovely. Mind the water out there."],
+  ]),
+  ch1_hs_dinh: dlg([
+    ["banoi", "banoi_normal", "Hội làng cuối hè. Cháu ở đủ lâu thì được xem.", "The village festival is at summer's end. Stay long enough and you'll get to see it."],
+  ]),
+  ch1_meet_thu: dlg([
+    ["thu", "thu_normal", "Mày từ Hà Nội về à? Trông dở thế.", "You're from Hanoi? You look so hopeless."],
+    ["thu", "thu_normal", "Bắt ếch mà cứ nhìn xuống nước là không bao giờ bắt được đâu.", "Staring at the water like that — you'll never catch anything."],
+  ]),
+  ch1_thu_choice1: dlg([
+    ["thu", "thu_normal", "Vậy thì làm gì ra đây?", "Then what did you come out here for?"],
+  ]),
+  ch1_thu_choice2: dlg([
+    ["thu", "thu_normal", "(cười) Thì bắt đi. Tao xem.", "(laughs) Go on then. I'll watch."],
+  ]),
+  ch1_seed_meal: dlg([
+    ["minh", "minh", "Về ăn cơm với tao không?", "Want to come home and eat with me?"],
+    ["thu", "thu_normal", "Thôi. Tao no rồi.", "Nah. I'm full."],
+    ["minh", "minh", "Mày ăn gì mà no?", "Full from what?"],
+    ["thu", "thu_normal", "(quay đi) Ăn... ổi. Lúc nãy.", "(turns away) I ate... guava. Earlier."],
+  ]),
+  ch1_banoi_unease: dlg([
+    ["banoi", "banoi_normal", "Nãy cháu đứng ngoài bờ ao nói chuyện với ai thế?", "Who were you talking to out by the pond just now?"],
+    ["minh", "minh", "Bạn con. Con bé áo hoa.", "A friend. The girl in the flowered shirt."],
+    ["banoi", "banoi_normal", "...Ừ. Tối rồi, vào ăn cơm.", "...I see. It's late. Come in and eat."],
+  ]),
+
+  ch2_fireflies_intro: dlg([
+    ["thu", "thu_normal", "Ra đây. Tao chỉ cho cái này.", "Come here. Let me show you something."],
+  ]),
+  ch2_fireflies_after: dlg([
+    ["thu", "thu_normal", "Người ta nói đom đóm là hồn của những đứa trẻ.", "They say fireflies are the souls of children."],
+    ["minh", "minh", "Đứa trẻ nào?", "What children?"],
+    ["thu", "thu_normal", "(dừng) Không biết. Bà tao kể vậy.", "(pauses) I don't know. My grandmother told me that."],
+  ]),
+  ch2_boat_intro: dlg([
+    ["minh", "minh", "Mày biết gấp thuyền không?", "Do you know how to fold a boat?"],
+    ["thu", "thu_normal", "Biết. Tao gấp được.", "Yeah. I can do it."],
+    ["thu", "thu_normal", "Cái giấy của mày xấu lắm mới không được.", "It's your paper. Bad paper."],
+    ["minh", "minh", "Giấy tao thì liên quan gì...", "What does my paper have to do with it..."],
+    ["thu", "thu_normal", "Liên quan. Giấy tốt gấp mới ra hình. Giấy mày dở.", "Everything. Good paper folds into shape. Yours is no good."],
+  ]),
+  ch2_boat_taught: dlg([
+    ["thu", "thu_normal", "...Được rồi. Tao gấp được rồi.", "...There. I can do it now."],
+  ]),
+  ch2_jealous: dlg([
+    ["minh", "minh", "Mai tao đi câu với thằng Bắp.", "Tomorrow I'm going fishing with Bap."],
+    ["thu", "thu_normal", "(im một lúc) Thì đi đi.", "(silent a moment) Then go."],
+    ["minh", "minh", "Mày không đi cùng à?", "You're not coming?"],
+    ["thu", "thu_normal", "Tao không thèm.", "I don't care to."],
+  ]),
+  ch2_jealous_after: dlg([
+    ["thu", "thu_normal", "(như không có gì) Hôm nay tao thấy con ếch to lắm ở bờ ao.", "(as if nothing happened) I saw a huge frog by the pond today."],
+  ]),
+  ch2_wish: dlg([
+    ["minh", "minh", "Trên cành đa buộc đầy dải vải đỏ. Có một dải chữ trẻ con: \"Con muốn ở lại làng mãi mãi. Đừng bắt con đi.\"", "Red cloth strips are tied all over the banyan. One has a child's scrawl: \"I want to stay in the village forever. Don't take me away.\""],
+    ["minh", "minh", "Mày ước điều này à?", "Did you make this wish?"],
+    ["thu", "thu_normal", "Ừ. Tao ước. Và người ta đã cho tao ở lại.", "I made a wish. And they let me stay."],
+    ["minh", "minh", "Vậy mày vui không?", "So are you happy?"],
+    ["thu", "thu_normal", "Vui. Nhưng cô đơn lắm. Cho đến khi mày đến.", "Happy. But so lonely. Until you came."],
+  ]),
+  ch2_song: dlg([
+    ["thu", "thu_normal", "\"Con cò mà đi ăn đêm...\" Hát đi. Mày hát dở nhưng tao thích.", "\"The little stork goes hunting at night...\" Sing. You're bad at it but I like it."],
+  ]),
+  ch2_song_after: dlg([
+    ["thu", "thu_normal", "(cười nhỏ) Đó. Giữ lấy bài đó nghe.", "(soft laugh) There. Hold on to that song, okay."],
+  ]),
+  ch2_ram: dlg([
+    ["minh", "minh", "Bà ơi, bà làm gì vậy?", "Grandma, what are you doing?"],
+    ["banoi", "banoi_normal", "Cúng cô hồn. Rằm tháng Bảy, những người chết chưa về được thì lang thang.", "Offerings for the wandering souls. On the Ghost Festival, those who can't return roam about."],
+    ["banoi", "banoi_normal", "Mình cúng để họ đỡ đói, đỡ lạnh.", "We make offerings so they're less hungry, less cold."],
+  ]),
+  ch2_cold: dlg([
+    ["minh", "minh", "Nếu ba mày gọi về sớm thì sao?", "What if your dad calls you back early?"],
+    ["thu", "thu_normal", "(im lặng dài) Vậy mày đi đi.", "(a long silence) Then you can go."],
+    ["minh", "minh", "Tao nói \"nếu\" thôi. Chưa có gì—", "I just said \"if.\" Nothing's happened—"],
+    ["thu", "thu_sad", "Tao biết.", "I know."],
+  ]),
+
+  ch3_grave: dlg([
+    ["minh", "minh", "Nguyễn Thị Thu · 1984 – 1994.", "Nguyen Thi Thu · 1984 – 1994."],
+    ["minh", "minh", "...Thu là tên phổ biến mà. Chắc trùng tên thôi.", "...Thu is a common name. It must just be a coincidence."],
+  ]),
+  ch3_notebook: dlg([
+    ["minh", "minh", "Nguyễn Thị Thu — sinh 1984, mất tháng 8 năm 1994 — mùa lũ.", "Nguyen Thi Thu — born 1984, died August 1994 — the flood."],
+  ]),
+  ch3_ongtu: dlg([
+    ["ongtu", "ongtu_normal", "Cháu chờ ai ở đây?", "Who are you waiting for, child?"],
+    ["minh", "minh", "Chờ Thu. Bạn con.", "Thu. My friend."],
+    ["ongtu", "ongtu_normal", "(im lặng dài) ...Áo hoa nhỏ?", "(a long silence) ...The little flowered shirt?"],
+    ["minh", "minh", "Ông biết cô bé đó à?", "You know her?"],
+    ["ongtu", "ongtu_normal", "Con sông đó. Mùa lũ năm 94...", "That river. The flood. '94..."],
+  ]),
+  ch3_ongtu_cine: dlg([
+    ["ongtu", "ongtu_normal", "Cháu về nhà đi.", "Go home, child."],
+  ]),
+
+  ch4a_banoi: dlg([
+    ["minh", "minh", "Bà ơi. Thu là...", "Grandma. Thu is..."],
+    ["banoi", "banoi_normal", "(im lặng dài, không ngạc nhiên) Ừ. Bà biết cháu thấy nó.", "(a long silence, unsurprised) Yes. I knew you could see her."],
+    ["banoi", "banoi_normal", "Thu là con nuôi nhà ông Hùng đầu xóm. Bố mẹ ruột nó bỏ vào Nam từ khi nó còn đỏ hỏn.", "Thu was the adopted child of old Hung's family. Her birth parents went south when she was still a newborn."],
+    ["banoi", "banoi_normal", "Nó biết mình là con nuôi. Sợ nhất là bị trả về trại.", "She knew she was adopted. What she feared most was being sent back to the orphanage."],
+    ["banoi", "banoi_normal", "Năm 94. Mùa lũ về sớm. Nó chạy ra sông...", "Ninety-four. The flood came early. She ran out to the river..."],
+    ["banoi", "banoi_crying", "(rất nhỏ) Ông Tư kéo nó lên. Ở khúc dưới.", "(very quietly) Old Tu pulled her out. Downstream."],
+    ["banoi", "banoi_crying", "Bà không hỏi cháu giận bà không. Bà hỏi cháu có tiếc mùa hè này không.", "I won't ask if you're angry with me. I'm asking if you regret this summer."],
+  ]),
+  ch4a_confront: dlg([
+    ["thu", "thu_sad", "(đang hát ca dao con cò...)", "(humming the stork song...)"],
+    ["minh", "minh", "Mày... mày là...", "You... you're..."],
+    ["thu", "thu_sad", "Ừ.", "Yeah."],
+    ["minh", "minh", "Sao mày không nói?", "Why didn't you tell me?"],
+    ["thu", "thu_sad", "Mày có bỏ đi không?", "Would you have left?"],
+    ["thu", "thu_sad", "Đó. Tao sợ vậy đó.", "That. That's what I was afraid of."],
+  ]),
+
+  ch4b_outside: dlg([
+    ["thu", "thu_sad", "Mày biết tao chưa bao giờ được vào hội làng không?", "Did you know I've never been allowed into the village festival?"],
+    ["thu", "thu_sad", "Mỗi năm tao đứng ngoài nhìn vào.", "Every year I just watched from outside."],
+    ["minh", "minh", "Tại sao không vào?", "Why didn't you go in?"],
+    ["thu", "thu_sad", "(im lặng) Người ta không thấy tao.", "(silence) People couldn't see me."],
+  ]),
+  ch4b_ask_banoi: dlg([
+    ["minh", "minh", "Bà ơi. Con muốn dẫn Thu vào hội.", "Grandma. I want to bring Thu to the festival."],
+    ["banoi", "banoi_crying", "(im lặng dài. Gật đầu. Lau mắt. Không nói gì.)", "(a long silence. A nod. She wipes her eyes. Says nothing.)"],
+  ]),
+  ch4b_gate: dlg([
+    ["thu", "thu_sad", "Mày... mày có chắc không?", "Are you... are you sure?"],
+    ["minh", "minh", "Ừ.", "Yeah."],
+  ]),
+  ch4b_elders: dlg([
+    ["ongtu", "ongtu_normal", "(chắp tay, không nhìn thẳng Thu) Thu ơi. Ông xin lỗi con. Ông không kịp.", "(hands clasped, not looking straight at her) Thu. I'm sorry, child. I wasn't fast enough."],
+    ["banoi", "banoi_crying", "(cầm tay Thu) Con đã ở lại đủ lâu rồi. Con xứng đáng được nghỉ.", "(taking Thu's hand) You've stayed long enough, child. You deserve to rest."],
+  ]),
+  ch4b_farewell: dlg([
+    ["thu", "thu_smile", "Mày có nhớ tao không?", "Will you remember me?"],
+    ["thu", "thu_smile", "Vậy là đủ rồi.", "That's enough, then."],
+  ]),
+};
+
+export const DIALOGUE = {
+  vi: Object.fromEntries(Object.entries(RAW).map(([k, v]) => [k, v.vi])),
+  en: Object.fromEntries(Object.entries(RAW).map(([k, v]) => [k, v.en])),
+};
+
+export const LETTER = {
+  vi: {
+    title: "",
+    body: [
+      "Gửi người nào đó chưa biết tao là ai,",
+      "",
+      "Nếu mày đọc cái này, có nghĩa là mày đã thấy tao.",
+      "Và có nghĩa là tao không cô đơn nữa.",
+      "",
+      "Tao biết tao là ma từ lâu rồi.",
+      "Tao nhớ lúc chết. Tao nhớ nước lạnh.",
+      "",
+      "Nhưng tao không muốn đi.",
+      "Không phải vì sợ chết —",
+      "mà vì tao chưa bao giờ có ai nhớ tao cả.",
+      "",
+      "Khi mày đến, tao định không nói gì hết.",
+      "Nhưng mày cứ hỏi, cứ cười, cứ rủ tao đi chơi,",
+      "như thể tao thật sự tồn tại.",
+      "",
+      "Mày là người đầu tiên hát ca dao cùng tao,",
+      "bắt đom đóm cùng tao, ngồi nhìn trăng cùng tao",
+      "mà không hỏi tao là ai hay từ đâu đến.",
+      "",
+      "Tao xin lỗi vì không nói sớm hơn.",
+      "Tao ích kỷ. Tao sợ mày bỏ đi.",
+      "",
+      "Nhưng mày biết rồi mà vẫn không bỏ.",
+      "Mày đã cho tao tham gia hội làng lần đầu tiên.",
+      "Giờ tao có thể đi rồi. Không sợ bị quên nữa.",
+      "",
+      "Mùa hè của chúng mình ngắn lắm.",
+      "Nhưng tao sẽ giữ nó mãi mãi.",
+      "Mày cũng vậy nha.",
+      "",
+      "— Thu",
+    ],
+    ps_default: "T/B: Mày hát ca dao dở lắm. Nhưng tao thích nghe.",
+    ps_boat: "T/B: Tao gấp được thuyền giấy rồi đó. Xấu thôi. Nhưng tao gấp được.",
+    thanks: "Cảm ơn mày đã nhớ hết mọi thứ.",
+  },
+  en: {
+    title: "",
+    body: [
+      "To someone who doesn't know who I am yet,",
+      "",
+      "If you're reading this, it means you saw me.",
+      "And it means I'm not alone anymore.",
+      "",
+      "I've known I was a ghost for a long time.",
+      "I remember dying. I remember the cold water.",
+      "",
+      "But I didn't want to go.",
+      "Not because I was afraid of death —",
+      "but because no one had ever remembered me.",
+      "",
+      "When you came, I meant to say nothing at all.",
+      "But you kept asking, kept laughing, kept inviting me to play,",
+      "as if I really existed.",
+      "",
+      "You were the first to sing folk songs with me,",
+      "to catch fireflies with me, to watch the moon with me,",
+      "without asking who I was or where I came from.",
+      "",
+      "I'm sorry I didn't tell you sooner.",
+      "I was selfish. I was afraid you'd leave.",
+      "",
+      "But you knew, and you stayed anyway.",
+      "You brought me into the village festival for the first time.",
+      "Now I can go. No longer afraid of being forgotten.",
+      "",
+      "Our summer was so short.",
+      "But I'll keep it forever.",
+      "You keep it too, okay.",
+      "",
+      "— Thu",
+    ],
+    ps_default: "P.S. You sing folk songs terribly. But I liked listening.",
+    ps_boat: "P.S. I can fold a paper boat now. An ugly one. But I can.",
+    thanks: "Thank you for remembering everything.",
+  },
+};
