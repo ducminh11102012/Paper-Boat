@@ -86,6 +86,28 @@ assets/audio/{village,summer,doubt,farewell,cadao}.mp3
 Exact generation prompts (with the locked STYLE FORMULA embedded) are in
 `tools/asset_prompts.md`.
 
+## Generating character art with AutoSprite (automated)
+
+`tools/gen_assets.mjs` generates the **characters** (Minh, Thu, Bà Nội, Ông Tư) via the
+[AutoSprite](https://www.autosprite.io) REST API and writes them straight into
+`public/assets/` — the same paths `art.js` auto-loads. Backgrounds and music stay on the
+Higgsfield pipeline above (AutoSprite is sprite/character focused).
+
+The API key is read from the `AUTO_SPRITE_AUTH` env var and sent as the `x-api-key` header —
+it is never written to disk or committed (see `.env.example`):
+
+```bash
+export AUTO_SPRITE_AUTH=vspk_...        # create at https://www.autosprite.io/apikey
+node tools/gen_assets.mjs               # base images → portraits/ + sprites/ (1 credit each)
+node tools/gen_assets.mjs --sprites     # also transparent walk spritesheets (5 credits each)
+node tools/gen_assets.mjs --dry-run     # print the plan, no API calls, no credits
+```
+
+Flags: `--only=minh,thu` · `--quality=turbo|pro` · `--out=DIR` · `--force` (overwrite
+existing) · `--dry-run`. Files are written only on success, so a missing/failed asset just
+keeps the hand-coded placeholder. The sprite loader auto-detects AutoSprite's transparent
+(`removeBg`) PNGs and uses them as-is, while legacy chroma-keyed PNGs are still keyed out.
+
 ## Deploy (Higgsfield apps engine)
 
 `tools/package.sh` builds `dist/paper-boats.zip` with `logic.js` + `index.html` + `assets/`

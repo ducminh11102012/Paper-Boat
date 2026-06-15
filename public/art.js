@@ -380,6 +380,25 @@ class Art {
     });
   }
 
+  // draw an image into a fresh canvas (preserves any existing alpha)
+  _toCanvas(img) {
+    const { c, x } = mk(img.naturalWidth, img.naturalHeight);
+    x.drawImage(img, 0, 0);
+    return c;
+  }
+
+  // true if the image already has meaningful transparency (e.g. AutoSprite removeBg).
+  // Samples a coarse grid so we don't scan every pixel of a big sheet.
+  _hasAlpha(img) {
+    const { c, x } = mk(img.naturalWidth, img.naturalHeight);
+    x.drawImage(img, 0, 0);
+    const d = x.getImageData(0, 0, c.width, c.height).data;
+    const step = Math.max(1, Math.floor((c.width * c.height) / 4096)) * 4;
+    let clear = 0, seen = 0;
+    for (let i = 3; i < d.length; i += step) { seen++; if (d[i] < 16) clear++; }
+    return seen > 0 && clear / seen > 0.05;
+  }
+
   // key out a near-key-color background to transparent, return canvas
   _keyOut(img, keyHex) {
     const { c, x } = mk(img.naturalWidth, img.naturalHeight);
@@ -406,7 +425,11 @@ class Art {
     }
     for (const key of Object.keys(SPR)) {
       jobs.push(this._tryImg(`./assets/sprites/${key}.png`).then((im) => {
-        if (im) { const keyed = this._keyOut(im, key === "thu" ? "#00FF00" : "#FF00FF"); this.sprite[key] = { frames: [keyed, keyed, keyed], still: true }; }
+        if (!im) return;
+        // AutoSprite exports (removeBg) already carry a real alpha channel — use as-is.
+        // Legacy chroma-keyed PNGs (magenta for Minh, green for Thu) get keyed out.
+        const cv = this._hasAlpha(im) ? this._toCanvas(im) : this._keyOut(im, key === "thu" ? "#00FF00" : "#FF00FF");
+        this.sprite[key] = { frames: [cv, cv, cv], still: true };
       }));
     }
     await Promise.all(jobs);
