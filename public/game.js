@@ -1,5 +1,5 @@
 // game.js — Paper Boats engine. Exposes G (story primitive API) + boot(storyFn).
-import { art, NATIVE_W, NATIVE_H, PAL, paperBoat } from "./art.js";
+import { art, NATIVE_W, NATIVE_H, PAL, paperBoat, jarWithFirefly } from "./art.js";
 import { audio } from "./audio.js";
 import { UI, NARR, SPEAKER, DIALOGUE, LETTER } from "./strings.js";
 
@@ -13,9 +13,9 @@ const S = {
   canvas: null, ctx: null, nat: null, nctx: null,
   view: { scale: 4, ox: 0, oy: 0 },
   scene: { bg: "village", palette: "warm", bounds: { x: 14, y: 96, w: 292, h: 78 } },
-  player: { x: 160, y: 150, dir: "down", frame: 0, animT: 0, moving: false, visible: false },
+  player: { x: 160, y: 150, dir: "down", frame: 0, animT: 0, moving: false, visible: false, sprite: "minh" },
   thu: { x: 70, y: 130, visible: false, portrait: "thu_normal", alpha: 0.88, flickerT: 0, bob: 0, fadeTarget: 0.88 },
-  fireflies: null,
+  fireflies: null, minigame: null, props: [],
   cam: { zoom: 1, cx: NW / 2, cy: NH / 2, tz: 1, tcx: NW / 2, tcy: NH / 2 },
   dim: 0, dimT: 0, vignette: 0,
   fade: 1, fadeTarget: 1,
@@ -34,6 +34,7 @@ const PALETTES = {
   doubt:   { fill: "rgba(70,96,140,0.20)", op: "multiply", filter: "saturate(0.82)" },
   truth:   { fill: "rgba(150,70,110,0.18)", op: "multiply", filter: "saturate(0.95)" },
   night:   { fill: "rgba(40,60,110,0.22)", op: "multiply", filter: "none" },
+  epilogue:{ fill: "rgba(120,140,170,0.10)", op: "multiply", filter: "saturate(0.85)" },
   none:    { fill: null, op: "source-over", filter: "none" },
 };
 
@@ -181,8 +182,9 @@ function update(dt) {
   }
   // dialogue typewriter
   if (S.dlg) tickDialogue(dt);
-  // fireflies minigame
+  // minigames
   if (S.fireflies) tickFireflies(dt);
+  if (S.minigame) tickMinigame(dt);
 }
 
 function clamp(v, a, b) { return v < a ? a : v > b ? b : v; }
@@ -194,6 +196,7 @@ function render() {
   if (S.mode === "lang") { drawLanguage(); drawFade(); return; }
   if (S.mode === "title") { composeWorld(); blitWorld(); drawTitle(); drawFade(); return; }
   if (S.mode === "letter") { drawLetter(); drawFade(); return; }
+  if (S.mode === "recap") { drawRecap(); drawFade(); return; }
   if (S.mode === "end") { drawEnd(); drawFade(); return; }
 
   composeWorld();
@@ -207,6 +210,7 @@ function render() {
   if (S.dlg) drawDialogue();
   if (S.choiceUI) drawChoice();
   if (S.fireflies) drawFirefliesUI();
+  if (S.minigame) drawMinigameUI();
   if (S.hint) drawHint();
   drawFade();
 }
@@ -221,6 +225,13 @@ function composeWorld() {
   x.filter = "none";
   // fireflies behind/around
   if (S.fireflies) drawFirefliesWorld(x);
+  // world props (paper boat, jar, ...)
+  for (const pr of S.props) {
+    if (pr.kind === "boat") paperBoat(x, pr.x, pr.y, pr.s || 1.2);
+    else if (pr.kind === "jar") jarWithFirefly(x, pr.x, pr.y, pr.glow !== false);
+  }
+  // minigame world layer
+  if (S.minigame) drawMinigameWorld(x);
   // entities sorted by y
   const ents = [];
   if (S.thu.visible) ents.push({ y: S.thu.y, kind: "thu" });
@@ -246,7 +257,7 @@ function blitWorld() {
 }
 
 function drawPlayer(x) {
-  const p = S.player; const fr = art.sprite.minh.frames[art.sprite.minh.still ? 0 : p.frame];
+  const p = S.player; const set = art.sprite[p.sprite] || art.sprite.minh; const fr = set.frames[set.still ? 0 : p.frame];
   const w = fr.width, h = fr.height;
   x.save();
   if (p.dir === "left") { x.translate(p.x + w / 2, 0); x.scale(-1, 1); x.drawImage(fr, 0, p.y - h + 2); }
@@ -339,7 +350,7 @@ function syncThuPortrait() {
 function tickDialogue(dt) {
   const d = S.dlg; const line = d.lines[d.i];
   if (d.shown < line.t.length) {
-    d.shown += dt * 42; // chars/sec
+    d.shown += dt * 26; // chars/sec — unhurried, let it land
     d.blipT -= dt;
     if (d.blipT <= 0 && line.sp) { audio.blip(line.sp); d.blipT = 0.055; }
     if (d.shown > line.t.length) d.shown = line.t.length;
@@ -449,7 +460,7 @@ function drawNarrate() {
   if (n.shown >= n.text.length && (Math.sin(performance.now() / 300) > 0)) { ctx.fillStyle = "rgba(233,226,210,0.6)"; ctx.font = uiFont(13); ctx.fillText(UI[S.locale].press_continue, V.w / 2, V.h * 0.85); }
   ctx.textAlign = "left";
   // tick
-  if (n.shown < n.text.length) { n.shown += 0.016 * 40; if (Math.floor(n.shown) % 2 === 0) audio.blip("narr"); }
+  if (n.shown < n.text.length) { n.shown += 0.016 * 24; if (Math.floor(n.shown) % 2 === 0) audio.blip("narr"); }
   if (consumeAction()) { if (n.shown < n.text.length) n.shown = n.text.length; else { const cb = n.done; S.narr = null; S.mode = "play"; cb && cb(); } }
   consumeTap();
 }
@@ -499,7 +510,7 @@ function drawEnd() {
   ctx.fillStyle = "rgba(243,236,223,0.65)"; ctx.font = "italic " + uiFont(Math.max(14, V.h * 0.026));
   wrapTextCentered(ctx, NARR[S.locale].credits_line, V.w / 2, V.h * 0.44, V.w * 0.7, Math.max(22, V.h * 0.04));
   ctx.fillStyle = "rgba(242,215,154,0.85)"; ctx.font = uiFont(Math.max(13, V.h * 0.024));
-  ctx.fillText(UI[S.locale].memories_kept + ": " + S.memoriesKept + " / 4", V.w / 2, V.h * 0.62);
+  ctx.fillText(UI[S.locale].memories_kept + ": " + S.memoriesKept + " / 6", V.w / 2, V.h * 0.62);
   // paper boat drift
   const nat = S.nat, nx = S.nctx; nx.clearRect(0, 0, NW, NH);
   paperBoat(nx, (S.endT * 14) % (NW + 40) - 20, 0, 1.6);
@@ -586,6 +597,65 @@ function drawFirefliesUI() {
   for (let i = 0; i < f.caught; i++) { ctx.fillStyle = "rgba(255,230,140,0.9)"; ctx.beginPath(); ctx.arc(jx + 10 + (i % 3) * 12, jy + 50 - Math.floor(i / 3) * 12, 3, 0, 6.28); ctx.fill(); }
 }
 
+// ================= GENERIC MINIGAME =================
+function tickMinigame(dt) {
+  const m = S.minigame;
+  if (m.update) m.update(dt);
+  const tap = consumeTap();
+  if (tap) {
+    if (m.ordered) {
+      const t = m.targets[m.got];
+      if (t && Math.hypot(tap.x - t.x, tap.y - t.y) < (t.r || 14)) { m.got++; m.onHit && m.onHit(m.got - 1); audio.sfx(m.sfx || "paper"); }
+    } else {
+      for (let i = 0; i < m.targets.length; i++) { const t = m.targets[i]; if (!t.hit && Math.hypot(tap.x - t.x, tap.y - t.y) < (t.r || 14)) { t.hit = true; m.got++; m.onHit && m.onHit(i); audio.sfx(m.sfx || "water"); break; } }
+    }
+  }
+  consumeAction();
+  if (m.got >= m.needed) { const cb = m.done; S.minigame = null; S.hint = ""; cb && cb(); }
+}
+function drawMinigameWorld(x) {
+  const m = S.minigame;
+  if (m.drawWorld) { m.drawWorld(x); return; }
+  for (let i = 0; i < m.targets.length; i++) {
+    const t = m.targets[i]; if (t.hit) continue; if (m.ordered && i !== m.got) continue;
+    const pulse = 0.5 + 0.5 * Math.sin(performance.now() / 250);
+    x.save(); x.globalCompositeOperation = "lighter"; x.globalAlpha = 0.45 + 0.4 * pulse; x.fillStyle = t.color || PAL.amber;
+    x.beginPath(); x.arc(t.x, t.y, (t.r || 6) * 0.55, 0, 6.28); x.fill();
+    x.globalAlpha = 0.2; x.beginPath(); x.arc(t.x, t.y, (t.r || 10), 0, 6.28); x.fill(); x.restore();
+  }
+}
+function drawMinigameUI() {
+  const ctx = S.ctx, V = S.view, m = S.minigame;
+  ctx.textAlign = "center";
+  if (m.goalKey) {
+    ctx.fillStyle = "rgba(0,0,0,0.4)"; roundRect(ctx, V.w / 2 - 100, V.h * 0.08 - 18, 200, 30, 8); ctx.fill();
+    ctx.fillStyle = "#ffe68c"; ctx.font = uiFont(Math.max(15, V.h * 0.028)); ctx.fillText(UI[S.locale][m.goalKey] + m.got + " / " + m.needed, V.w / 2, V.h * 0.08 + 3);
+  }
+  if (m.hintKey) { ctx.fillStyle = "rgba(243,238,222,0.8)"; ctx.font = uiFont(Math.max(12, V.h * 0.02)); ctx.fillText(UI[S.locale][m.hintKey], V.w / 2, V.h * 0.14); }
+  ctx.textAlign = "left";
+}
+
+// ================= MEMORY RECAP =================
+const MEM_LIST = [["mem_fireflies", "mem_fireflies_label"], ["mem_boat", "mem_boat_label"], ["mem_grave", "mem_grave_label"], ["mem_song", "mem_song_label"], ["mem_moon", "mem_moon_label"], ["mem_stone", "mem_stone_label"]];
+function drawRecap() {
+  const ctx = S.ctx, V = S.view; ctx.fillStyle = "#120d0a"; ctx.fillRect(0, 0, V.w, V.h);
+  ctx.fillStyle = "rgba(255,200,120,0.05)"; ctx.fillRect(0, 0, V.w, V.h);
+  ctx.textAlign = "center";
+  ctx.fillStyle = "#f2d79a"; ctx.font = "600 " + uiFont(Math.max(20, V.h * 0.042)); ctx.fillText(UI[S.locale].recap_title, V.w / 2, V.h * 0.18);
+  ctx.fillStyle = "rgba(243,238,222,0.7)"; ctx.font = "italic " + uiFont(Math.max(14, V.h * 0.026)); ctx.fillText(NARR[S.locale].recap_intro, V.w / 2, V.h * 0.26);
+  let y = V.h * 0.38; ctx.font = uiFont(Math.max(15, V.h * 0.03));
+  for (const [flag, label] of MEM_LIST) {
+    const kept = S.flags[flag];
+    ctx.fillStyle = kept ? "#bfe6dd" : "rgba(120,120,120,0.45)";
+    ctx.fillText((kept ? "✦  " : "·   ") + UI[S.locale][label], V.w / 2, y); y += Math.max(26, V.h * 0.05);
+  }
+  ctx.fillStyle = "rgba(242,215,154,0.8)"; ctx.font = uiFont(Math.max(13, V.h * 0.024));
+  ctx.fillText(UI[S.locale].memories_kept + ": " + S.memoriesKept + " / 6", V.w / 2, y + 12);
+  if (Math.sin(performance.now() / 320) > 0) { ctx.fillStyle = "rgba(233,226,210,0.5)"; ctx.font = uiFont(12); ctx.fillText(UI[S.locale].press_continue, V.w / 2, V.h - 24); }
+  ctx.textAlign = "left";
+  if (consumeAction() || consumeTap()) { consumeAction(); consumeTap(); const cb = S._recapDone; S._recapDone = null; S.mode = "play"; cb && cb(); }
+}
+
 // ================= STORY PRIMITIVE API (G) =================
 const wait = (ms) => new Promise((r) => setTimeout(r, ms));
 const G = {
@@ -610,11 +680,15 @@ const G = {
     S.scene = { bg, palette: opts.palette || "warm", bounds: opts.bounds || { x: 16, y: 100, w: 288, h: 72 } };
     if (opts.spawn) { S.player.x = opts.spawn.x; S.player.y = opts.spawn.y; }
     S.player.visible = opts.player !== false;
-    S.markers = [];
+    if (opts.sprite) S.player.sprite = opts.sprite;
+    S.markers = []; S.props = []; S.minigame = null;
     S.cam = { zoom: 1, cx: NW / 2, cy: NH / 2, tz: 1, tcx: NW / 2, tcy: NH / 2 };
     S.dimT = opts.dim || 0;
   },
   palette(p) { S.scene.palette = p; },
+  setPlayerSprite(key) { S.player.sprite = key; },
+  addProp(kind, x, y, extra = {}) { S.props.push({ kind, x, y, ...extra }); },
+  clearProps() { S.props = []; },
   showThu(x, y, portrait = "thu_normal") { S.thu.x = x; S.thu.y = y; S.thu.portrait = portrait; S.thu.visible = true; S.thu.alpha = 0.88; S.thu.fadeTarget = 0.88; },
   hideThu() { S.thu.visible = false; },
   moveThu(x, y) { S.thu.x = x; S.thu.y = y; },
@@ -706,6 +780,57 @@ const G = {
   async cineExit() { S.cam.tz = 1; S.cam.tcx = NW / 2; S.cam.tcy = NH / 2; S.dimT = S.scene.palette === "night" ? 0 : 0; S.vignette = 0; await wait(1200); },
 
   async fireflies() { return await new Promise((res) => startFireflies(res)); },
+
+  // generic tap-target minigame
+  async minigame(spec) {
+    S._moveEnabled = false;
+    S.minigame = {
+      got: 0, targets: spec.targets, ordered: !!spec.ordered,
+      needed: spec.needed ?? spec.targets.length,
+      goalKey: spec.goalKey, hintKey: spec.hintKey, sfx: spec.sfx,
+      onHit: spec.onHit, drawWorld: spec.drawWorld, update: spec.update, done: null,
+    };
+    await new Promise((res) => { S.minigame.done = res; });
+  },
+  async foldBoat() {
+    const cx = 152, cy = 148;
+    const pts = [{ x: cx - 14, y: cy - 1, r: 13 }, { x: cx + 14, y: cy - 1, r: 13 }, { x: cx, y: cy - 12, r: 13 }, { x: cx, y: cy + 11, r: 13 }];
+    await this.minigame({
+      targets: pts, ordered: true, needed: pts.length, goalKey: "fold_goal", hintKey: "fold_hint", sfx: "paper",
+      drawWorld: (x) => {
+        x.save(); x.fillStyle = "#efe7d2"; x.fillRect(cx - 18, cy - 16, 36, 30);
+        x.strokeStyle = "rgba(60,44,28,0.5)"; x.lineWidth = 1; x.strokeRect(cx - 18, cy - 16, 36, 30);
+        const m = S.minigame;
+        for (let i = 0; i < pts.length; i++) { const t = pts[i]; const active = i === m.got; x.globalAlpha = active ? (0.5 + 0.5 * Math.sin(performance.now() / 200)) : (i < m.got ? 0.3 : 0.12); x.fillStyle = active ? "#f2c14e" : "#caa84a"; x.beginPath(); x.arc(t.x, t.y, 3, 0, 6.28); x.fill(); }
+        x.globalAlpha = 1; x.restore();
+      },
+    });
+  },
+  async skipStones() {
+    const pts = [{ x: 60, y: 124, r: 15 }, { x: 90, y: 134, r: 15 }, { x: 46, y: 138, r: 15 }, { x: 78, y: 122, r: 15 }];
+    await this.minigame({ targets: pts, needed: 3, goalKey: "stone_goal", hintKey: "stone_hint", sfx: "water" });
+  },
+  async frogCatch() {
+    const pts = [{ x: 55, y: 132, r: 13, color: "#6fae6a" }, { x: 82, y: 126, r: 13, color: "#6fae6a" }, { x: 64, y: 140, r: 13, color: "#6fae6a" }];
+    await this.minigame({ targets: pts, needed: 3, goalKey: "frog_goal", hintKey: "frog_hint", sfx: "firefly" });
+  },
+  async releaseLantern() {
+    const t = { x: 155, y: 148, r: 20, color: PAL.amber };
+    await this.minigame({
+      targets: [t], needed: 1, hintKey: "lantern_hint", sfx: "lantern",
+      drawWorld: (x) => { x.save(); x.globalCompositeOperation = "lighter"; x.fillStyle = "rgba(255,200,120,0.45)"; x.beginPath(); x.arc(t.x, t.y, 11, 0, 6.28); x.fill(); x.restore(); x.fillStyle = PAL.lanternR; x.beginPath(); x.ellipse(t.x, t.y, 5, 6, 0, 0, 6.28); x.fill(); x.fillStyle = "#fff5d6"; x.fillRect(t.x - 1, t.y - 2, 2, 4); },
+    });
+  },
+  async lightIncense() {
+    const t = { x: 143, y: 150, r: 18, color: PAL.amber };
+    await this.minigame({ targets: [t], needed: 1, hintKey: "incense_hint", sfx: "firefly" });
+  },
+  async watchMoon() {
+    const t = { x: 160, y: 150, r: 44 };
+    await this.minigame({ targets: [t], needed: 1, hintKey: "moon_hint", sfx: "firefly" });
+  },
+
+  async recap() { S.mode = "recap"; await new Promise((res) => { S._recapDone = res; }); },
 
   // Thu farewell fade 0.88 -> 0 across ms
   async thuFade(ms = 8000) {

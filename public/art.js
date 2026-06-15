@@ -238,6 +238,27 @@ const bgPainters = {
     x.fillStyle = "rgba(255,220,150,0.5)"; x.fillRect(34, 34, 42, 42);
     x.fillStyle = "#5a4226"; x.fillRect(54, 34, 2, 42); x.fillRect(34, 54, 42, 2);
   },
+  epilogue(x) {
+    // same village, ten years on: cooler, desaturated, "thinner" light, autumn
+    vGrad(x, NATIVE_W, NATIVE_H, [[0, "#cbd0d6"], [0.5, "#b9bcc0"], [1, "#a8a9a6"]]);
+    x.fillStyle = "rgba(230,225,200,0.35)"; ellipse(x, 250, 40, 16, 16);
+    x.fillStyle = "#7e8a6e"; x.fillRect(0, 56, 320, 14);
+    dots(x, "#6c7860", 120, 0, 48, 320, 70, 11);
+    vGrad2(x, 0, 66, 320, 114, [[0, "#8c9a78"], [1, "#73806a"]]);
+    dots(x, "#7c8a6a", 200, 0, 70, 320, 178, 21);
+    // faded path
+    x.fillStyle = "#9a8e76";
+    x.beginPath(); x.moveTo(128, 70); x.bezierCurveTo(154, 110, 100, 140, 158, 180); x.lineTo(188, 180); x.bezierCurveTo(146, 140, 192, 110, 160, 70); x.closePath(); x.fill();
+    // pond, smaller, ducks
+    x.fillStyle = "#6f8390"; ellipse(x, 60, 134, 40, 24);
+    x.fillStyle = "#5f7280"; ellipse(x, 58, 132, 36, 20);
+    for (const [px, py] of [[48, 130], [70, 136]]) { x.fillStyle = "#e8e4da"; ellipse(x, px, py, 3, 2); x.fillStyle = "#caa84a"; x.fillRect(px + 2, py - 1, 1, 1); }
+    house(x, 210, 96, 40); house(x, 264, 110, 36, true);
+    banyan(x, 256, 70, 0.7);
+    // fallen leaves drifting
+    dots(x, "#b07a4e", 40, 0, 80, 320, 178, 55, 2);
+    dots(x, "#c89a5a", 30, 0, 80, 320, 178, 71, 1);
+  },
 };
 
 function vGrad2(x, ox, oy, w, h, stops) {
@@ -313,6 +334,14 @@ const portraitPainters = {
   ongtu_normal(x) { facebase(x, ["#2c2c22", "#1b1b14"]); bust(x, PAL.ongtuShirt, null); head(x, PAL.ongtuSkin, PAL.ongtuHair, {});
     x.fillStyle = "#2a2018"; x.fillRect(24, 36, 4, 1); x.fillRect(36, 36, 4, 1); /* hollow eyes */
     x.fillStyle = "#7a5a3a"; x.fillRect(50, 30, 2, 30); x.fillStyle = "#5a4226"; x.fillRect(50, 30, 1, 30); /* cane */ },
+  minh_adult(x) { facebase(x, ["#2b3550", "#1d2740"]); bust(x, "#43536a", "#2c3850");
+    // taller face, faint stubble, older eyes
+    const cx = 32, cy = 33; x.fillStyle = PAL.minhHair; ellipse(x, cx, cy - 5, 16, 14);
+    x.fillStyle = PAL.skin; ellipse(x, cx, cy, 12, 14);
+    x.fillStyle = PAL.minhHair; x.beginPath(); x.ellipse(cx, cy - 9, 13, 9, 0, Math.PI, 0); x.fill();
+    x.fillStyle = "#2a2018"; x.fillRect(cx - 6, cy + 1, 2, 2); x.fillRect(cx + 5, cy + 1, 2, 2);
+    x.fillStyle = "#9c5a4a"; x.fillRect(cx - 3, cy + 9, 6, 1);
+    x.fillStyle = "rgba(40,30,24,0.25)"; x.fillRect(cx - 6, cy + 12, 12, 3); /* stubble */ },
 };
 function thuGlow(x, a = 0.35) { x.fillStyle = `rgba(150,220,210,${a})`; ellipse(x, 32, 32, 22, 24); }
 function thuFlowers(x) { x.fillStyle = PAL.thuFlower; for (const [px, py] of [[18, 56], [44, 54], [30, 60]]) { x.fillRect(px, py, 2, 2); x.fillRect(px + 1, py + 1, 1, 1); } }
@@ -343,7 +372,17 @@ function spriteChar(x, conf, frame) {
 const SPR = {
   minh: { shirt: PAL.minhShirt, shirtSh: "#cdd6e0", legs: "#3a4658", skin: PAL.skin, hair: PAL.minhHair, accent: PAL.minhAccent },
   thu: { shirt: PAL.thuShirt, shirtSh: PAL.thuShirt2, legs: "#7a8a86", skin: PAL.thuSkin, hair: PAL.thuHair, braid: true, flower: true, flowerCol: PAL.thuFlower },
+  minh_adult: { shirt: "#43536a", shirtSh: "#36445a", legs: "#2c3340", skin: PAL.skin, hair: PAL.minhHair, accent: "#2c3850" },
 };
+
+// ---------- PROP DRAWERS (world objects placed by scenes) ----------
+export function jarWithFirefly(x, cx, cy, glow = true) {
+  x.fillStyle = "rgba(180,210,230,0.30)"; x.beginPath(); x.ellipse(cx, cy, 4, 6, 0, 0, Math.PI * 2); x.fill();
+  x.strokeStyle = "rgba(220,240,255,0.6)"; x.lineWidth = 1; x.stroke();
+  x.fillStyle = PAL.barkDark; x.fillRect(cx - 2, cy - 7, 4, 2);
+  if (glow) { x.save(); x.globalCompositeOperation = "lighter"; x.fillStyle = "rgba(255,230,140,0.9)"; x.beginPath(); x.arc(cx, cy + 1, 1.4, 0, 6.28); x.fill(); x.globalAlpha = 0.4; x.beginPath(); x.arc(cx, cy + 1, 3.5, 0, 6.28); x.fill(); x.restore(); }
+}
+export const PROPS = { paperBoat, jarWithFirefly };
 
 // ---------- ASSET MANAGER ----------
 class Art {
@@ -396,7 +435,7 @@ class Art {
   // Override placeholders with real Higgsfield assets when present in ./assets/.
   // Safe to call once at boot; missing files just keep the placeholder.
   async loadReal() {
-    const bgNames = { title: "title", village: "village", river: "river", banyan: "banyan", festival: "festival", letter: "letter", home: "home" };
+    const bgNames = { title: "title", village: "village", river: "river", banyan: "banyan", festival: "festival", letter: "letter", home: "home", epilogue: "epilogue" };
     const jobs = [];
     for (const [name, file] of Object.entries(bgNames)) {
       jobs.push(this._tryImg(`./assets/bg/${file}.png`).then((im) => { if (im) this.bg[name] = im; }));

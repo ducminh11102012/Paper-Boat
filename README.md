@@ -4,21 +4,24 @@ A faithful HTML5/Canvas adaptation of the *Paper Boats* master doc (v2.0): a bil
 (Tiếng Việt / English) narrative walking-sim about Minh and the ghost-girl Thu. This build
 covers the **Minimum Shippable** emotional slice:
 
-> Title → Language Select → Ch.1 → Ch.2 → Ch.3 → Ch.4A → Ch.4B → The Letter
+> Title → Language Select → Ch.1 → Ch.2 → Ch.3 → Ch.4A → Ch.4B → **Epilogue (10 years later)**
+> → Memory recap → The Letter
 
 ## What's implemented
 
-- **Full bilingual story & dialogue** (every line from the doc), portraits, typewriter text
-  with per-character text-blip SFX (Undertale-style; Thu has a faint shimmer tail).
-- **Hệ Thống Ký Ức (Memory system)** — `mem_fireflies`, `mem_boat`, `mem_grave`, `mem_song`.
-  The count changes the **final letter** (P/S line + a "thank you for remembering" line).
-  No bad ending — only *fuller* or *sparser*.
-- **Thu's transparency rule** — alpha 0.88 + micro-flicker + soft glow; staged farewell fade
-  0.88 → 0.6 → 0.3 → 0 at the festival.
-- **Cinematic camera** on the three `[CINE]` beats (Old Tu at the river, Grandma crying,
-  Thu's goodbye): zoom-in + world dim + vignette.
-- **Per-chapter palette** (warm golden hour → doubt → truth → festival night).
-- **Fireflies minigame**, free-roam **hotspot exploration** with optional/missable beats.
+- **Full bilingual story & dialogue** (expanded well beyond the doc), portraits, slow
+  unhurried typewriter text with per-character text-blip SFX (Thu has a faint shimmer tail).
+- **Interactive moments** (more to *do*, not just read): catch a frog, fold the paper boat
+  crease-by-crease, skip stones on the pond, watch the moon, light incense at the Ghost
+  Festival, catch fireflies, and **release the lantern** as Thu fades.
+- **Hệ Thống Ký Ức (Memory system)** — 6 keepable moments (`mem_fireflies`, `mem_boat`,
+  `mem_grave`, `mem_song`, `mem_moon`, `mem_stone`). They drive the **final letter** (P/S
+  line + a "thank you" line) and the **Epilogue** (the crooked paper boat; a jar with a
+  firefly if you kept that night). A pre-letter **recap** shows what you kept. No bad ending.
+- **Epilogue — "Ten years later"**: adult Minh walks the old places, recontextualized.
+- **Thu's transparency rule** — alpha 0.88 + micro-flicker + soft glow; staged farewell fade.
+- **Cinematic camera** on the `[CINE]` beats (Old Tu, Grandma crying, Thu's goodbye).
+- **Per-chapter palette** (warm golden hour → doubt → truth → festival night → cool autumn).
 - **Input**: keyboard (physical key codes), mouse, touch (drag to walk, tap to interact),
   and gamepad — every menu/choice is keyboard- and gamepad-navigable.
 - **Procedural Vietnamese-folk music** (đàn-bầu-flavored) + SFX via WebAudio.

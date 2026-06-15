@@ -74,10 +74,13 @@ const trace = [];
 while (frames < MAX) {
   try {
     // input policy
-    if (S.dlg || S.mode === "narrate" || S.mode === "titlecard" || S.choiceUI || S.mode === "letter" || S.mode === "title" || S.mode === "lang") {
+    if (S.dlg || S.mode === "narrate" || S.mode === "titlecard" || S.choiceUI || S.mode === "letter" || S.mode === "recap" || S.mode === "title" || S.mode === "lang") {
       S.input.action = true;
     } else if (S.fireflies) {
       const fly = S.fireflies.list.find((f) => !f.caught); if (fly) S.input.tapAt = { x: fly.x, y: fly.y };
+    } else if (S.minigame) {
+      const m = S.minigame; const t = m.ordered ? m.targets[m.got] : m.targets.find((tt) => !tt.hit);
+      if (t) S.input.tapAt = { x: t.x, y: t.y };
     } else if (S._exploreActive && S.markers && S.markers.length) {
       const m = S.markers.find((mm) => !mm.term) || S.markers[0]; S.input.tapAt = { x: m.x, y: m.y };
     } else {
@@ -99,14 +102,14 @@ console.log("--- trace ---"); console.log(trace.slice(0, 60).join("\n"));
 console.log(`frames simulated : ${frames}`);
 console.log(`final mode       : ${S.mode}`);
 console.log(`chapters seen    : ${[...chapters].join(" | ")}`);
-console.log(`memories kept    : ${S.memoriesKept} / 4  (${Object.keys(S.flags).filter((k) => k.startsWith("mem_")).join(", ")})`);
+console.log(`memories kept    : ${S.memoriesKept} / 6  (${Object.keys(S.flags).filter((k) => k.startsWith("mem_")).join(", ")})`);
 console.log(`letter PS uses   : ${S.flags.mem_boat ? "boat variant" : "default"}`);
 
 let fails = 0;
 const need = (c, m) => { if (!c) { console.error("  ✗ " + m); fails++; } else console.log("  ✓ " + m); };
 need(!error, "no runtime exceptions" + (error ? `: ${error.stack || error}` : ""));
 need(S.mode === "end" || S.mode === "letter", "reached the letter / ending");
-need(S.memoriesKept === 4, "all 4 memories collectible in one playthrough");
+need(S.memoriesKept === 6, "all 6 memories collectible in one playthrough");
 need(chapters.size >= 4, "all chapter title cards shown");
 console.log(fails ? `\nSMOKE TEST FAILED (${fails})` : "\nSMOKE TEST PASSED");
 process.exit(fails ? 1 : 0);
