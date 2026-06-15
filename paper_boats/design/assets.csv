@@ -1,0 +1,19 @@
+id,role,type,description,size/ratio,style line ref,source
+bg_title,title screen background,background,paper boat drifting on a moonlit village pond with banyan tree,16:9,STYLE FORMULA,generate
+bg_village,Ch1-2 village/pond scene,background,Vietnamese village dirt path pond lotus banyan top-down,16:9,STYLE FORMULA,generate
+bg_river,Ch3 riverbank doubt scene,background,muddy riverbank at dusk faded lotus reeds top-down,16:9,STYLE FORMULA,generate
+bg_banyan,Ch2-3 banyan tree shrine and grave,background,ancient banyan tree red cloth strips small shrine grave stone top-down,16:9,STYLE FORMULA,generate
+bg_festival,Ch4B festival courtyard,background,village temple courtyard night colorful paper lanterns top-down,16:9,STYLE FORMULA,generate
+bg_letter,letter paper texture,background,old folded child letter paper smudged ink warm lamplight,16:9,STYLE FORMULA,generate
+por_minh,Minh portrait,sprite,shy 11 year old Vietnamese boy short hair white shirt bust portrait,1:1,STYLE FORMULA,generate
+por_thu_normal,Thu normal portrait,sprite,10 year old ghost girl faded blue floral shirt braid gentle smile bust,1:1,STYLE FORMULA,generate
+por_thu_sad,Thu sad portrait,sprite,10 year old ghost girl faded floral shirt braid sorrowful looking down bust,1:1,STYLE FORMULA,generate
+por_thu_smile,Thu real smile portrait,sprite,10 year old ghost girl faded floral shirt braid radiant tearful true smile bust,1:1,STYLE FORMULA,generate
+por_banoi_normal,grandmother portrait,sprite,70 year old Vietnamese grandmother brown ao ba ba hair bun kind face bust,1:1,STYLE FORMULA,generate
+por_banoi_crying,grandmother crying portrait,sprite,70 year old grandmother brown ao ba ba weeping wiping tears bust,1:1,STYLE FORMULA,generate
+por_ongtu,old man Tu portrait,sprite,75 year old gaunt Vietnamese man worn brown shirt bamboo cane hollow eyes bust,1:1,STYLE FORMULA,generate
+spr_minh,Minh walking sprite,sprite,top-down 11 year old boy white shirt walking seen from above,1:1,STYLE FORMULA,generate
+spr_thu,Thu walking sprite,sprite,top-down 10 year old ghost girl faded floral shirt braid walking seen from above,1:1,STYLE FORMULA,generate
+mus_village,Ch1-2 exploration music,audio,warm gentle acoustic guitar and bamboo flute Vietnamese village,loop,STYLE FORMULA,generate
+mus_farewell,Ch4B farewell music,audio,sorrowful peaceful dan bau monochord and dan tranh zither,loop,STYLE FORMULA,generate
+mus_cadao,credits and letter music,audio,single mournful dan bau monochord nostalgic Vietnamese folk,loop,STYLE FORMULA,generate

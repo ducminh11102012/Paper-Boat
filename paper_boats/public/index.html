@@ -1,0 +1,35 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
+<title>Paper Boats</title>
+<style>
+  html, body { margin: 0; height: 100%; overflow: hidden; background: #0d0a08; }
+  body { -webkit-tap-highlight-color: transparent; touch-action: none; }
+  canvas { display: block; image-rendering: pixelated; image-rendering: crisp-edges; }
+  #dev { position: fixed; top: 4px; left: 4px; color: #0f0; font: 12px monospace; display: none; pointer-events: none; z-index: 9; }
+  #loading { position: fixed; inset: 0; display: flex; align-items: center; justify-content: center;
+    color: #e9e2d2; font: 16px system-ui, sans-serif; background: #2a2f4a; z-index: 5; }
+</style>
+</head>
+<body>
+<div id="loading">Paper Boats…</div>
+<canvas id="c"></canvas>
+<div id="dev"></div>
+<script type="module">
+  import { boot, G } from "./game.js";
+  import { story } from "./scenes.js";
+  const dev = new URLSearchParams(location.search).has("dev");
+  if (dev) document.getElementById("dev").style.display = "block";
+  window.addEventListener("error", (e) => { console.error("[PaperBoats]", e.message); });
+  try {
+    boot(story);
+    const l = document.getElementById("loading"); if (l) l.remove();
+  } catch (err) {
+    document.getElementById("loading").textContent = "Error: " + err.message;
+    console.error(err);
+  }
+</script>
+</body>
+</html>
